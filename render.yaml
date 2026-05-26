@@ -8,9 +8,11 @@ services:
       url: docker.io/n8nio/n8n:1.121.0
 
     envVars:
+      # REQUIRED BY RENDER
       - key: PORT
         value: "5678"
 
+      # CORE N8N SETTINGS
       - key: N8N_HOST
         value: ominicsr.onrender.com
 
@@ -38,6 +40,7 @@ services:
       - key: N8N_PERSONALIZATION_ENABLED
         value: "false"
 
+      # DATABASE (SUPABASE POSTGRES)
       - key: DB_TYPE
         value: postgresdb
 
@@ -59,27 +62,11 @@ services:
       - key: DB_POSTGRESDB_SSL
         value: "true"
 
+      # EXECUTION MODE (SAFE FOR FREE TIER)
       - key: EXECUTIONS_MODE
         value: regular
 
-      - key: N8N_RUNNERS_ENABLED
-        value: "true"
-
-      - key: N8N_RUNNERS_MODE
-        value: external
-
-      - key: N8N_RUNNERS_BROKER_LISTEN_ADDRESS
-        value: 0.0.0.0
-
-      - key: N8N_RUNNERS_BROKER_PORT
-        value: "5679"
-
-      - key: N8N_RUNNERS_AUTH_TOKEN
-        value: mysharedrunnersecret123
-
-      - key: N8N_NATIVE_PYTHON_RUNNER
-        value: "true"
-
+      # AUTH
       - key: N8N_BASIC_AUTH_ACTIVE
         value: "true"
 
@@ -92,6 +79,7 @@ services:
       - key: N8N_SECURE_COOKIE
         value: "true"
 
+      # EXECUTION STORAGE
       - key: EXECUTIONS_DATA_SAVE_ON_ERROR
         value: all
 
@@ -101,28 +89,13 @@ services:
       - key: EXECUTIONS_DATA_SAVE_MANUAL_EXECUTIONS
         value: "true"
 
+      # TIMEZONE
       - key: GENERIC_TIMEZONE
         value: America/New_York
 
       - key: TZ
         value: America/New_York
 
+      # BINARY DATA
       - key: N8N_DEFAULT_BINARY_DATA_MODE
         value: filesystem
-
-  - type: worker
-    name: n8n-runners
-    runtime: docker
-    plan: free
-
-    dockerfilePath: ./runners/Dockerfile
-
-    envVars:
-      - key: N8N_RUNNERS_AUTH_TOKEN
-        value: mysharedrunnersecret123
-
-      - key: N8N_RUNNERS_TASK_BROKER_URI
-        value: http://n8n-service:5679
-
-      - key: N8N_RUNNERS_AUTO_SHUTDOWN_TIMEOUT
-        value: "15"
