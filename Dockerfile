@@ -1,3 +1,7 @@
-FROM n8nio/n8n:latest
+FROM n8nio/runners:1.121.0
 
-EXPOSE 5678
+USER root
+
+RUN cd /opt/runners/task-runner-python && uv pip install pandas numpy requests
+
+USER runner
